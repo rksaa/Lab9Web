@@ -1,0 +1,41 @@
+* { box-sizing: border-box; }
+body { margin: 0; font-family: Arial, sans-serif; background: #f4f6f8; color: #263238; }
+.container { max-width: 960px; margin: 30px auto; background: #fff; padding: 24px; }
+header, footer { padding: 16px; background: #eaf2f8; }
+header h1 { margin: 0 0 4px; }
+header p { margin: 0; }
+nav { display: flex; flex-wrap: wrap; gap: 8px; padding: 14px 0; }
+nav a { color: #145a86; text-decoration: none; padding: 6px 12px; border-radius: 4px; }
+nav a:hover { text-decoration: underline; }
+nav a.active { background: #145a86; color: #fff; }
+main { min-height: 220px; padding: 16px 0; }
+footer { text-align: center; font-size: 14px; }
+
+table { width: 100%; border-collapse: collapse; margin: 12px 0; }
+th, td { border: 1px solid #cfd8dc; padding: 8px 10px; text-align: left; }
+th { background: #eaf2f8; }
+td.angka, th.angka { text-align: right; }
+
+.btn, button { display: inline-block; background: #145a86; color: #fff; border: 0; padding: 8px 14px;
+  border-radius: 4px; text-decoration: none; cursor: pointer; font-size: 14px; }
+.btn:hover, button:hover { background: #0f4466; }
+.btn-warn { background: #b26a00; }
+.btn-danger { background: #b3261e; }
+.aksi { display: flex; gap: 6px; align-items: center; }
+.aksi form { margin: 0; }
+
+form .baris { margin-bottom: 12px; }
+label { display: block; font-weight: bold; margin-bottom: 4px; }
+input[type=text], input[type=number], input[type=email], textarea {
+  width: 100%; padding: 8px; border: 1px solid #b0bec5; border-radius: 4px; font-size: 14px; }
+.error { color: #b3261e; font-size: 13px; margin-top: 4px; }
+
+.alert { padding: 10px 14px; border-radius: 4px; margin-bottom: 14px; }
+.alert-sukses { background: #e6f4ea; color: #1e6b34; border: 1px solid #b7dfc2; }
+.alert-gagal { background: #fdecea; color: #8a1c14; border: 1px solid #f3b9b4; }
+
+.cards { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+.card { flex: 1 1 200px; background: #eaf2f8; padding: 14px; border-radius: 6px; }
+.card span { display: block; font-size: 13px; }
+.card strong { font-size: 22px; }
+code { background: #eceff1; padding: 1px 5px; border-radius: 3px; }
