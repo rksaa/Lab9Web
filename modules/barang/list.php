@@ -6,21 +6,27 @@ $daftar = $pdo->query('SELECT * FROM data_barang ORDER BY id_barang DESC')->fetc
 <section>
     <h2>Data Barang</h2>
     <a class="btn" href="<?= e(url('barang/add')) ?>">Tambah Barang</a>
+    <div class="tabel-wrap">
     <table>
         <thead>
             <tr>
-                <th>No</th><th>Nama</th><th>Kategori</th>
+                <th>No</th><th>Gambar</th><th>Nama</th><th>Kategori</th>
                 <th class="angka">Harga Beli</th><th class="angka">Harga Jual</th>
                 <th class="angka">Stok</th><th>Aksi</th>
             </tr>
         </thead>
         <tbody>
         <?php if (!$daftar): ?>
-            <tr><td colspan="7">Belum ada data.</td></tr>
+            <tr><td colspan="8">Belum ada data.</td></tr>
         <?php endif; ?>
         <?php foreach ($daftar as $i => $b): ?>
             <tr>
                 <td><?= $i + 1 ?></td>
+                <td>
+                    <?php if (!empty($b['gambar'])): ?>
+                        <img class="thumb" src="<?= e(baseUrl('uploads/' . $b['gambar'])) ?>" alt="<?= e($b['nama']) ?>">
+                    <?php else: ?>-<?php endif; ?>
+                </td>
                 <td><?= e(ringkasTeks($b['nama'], 40)) ?></td>
                 <td><?= e($b['kategori']) ?></td>
                 <td class="angka"><?= e(formatRupiah((float) $b['harga_beli'])) ?></td>
@@ -39,4 +45,5 @@ $daftar = $pdo->query('SELECT * FROM data_barang ORDER BY id_barang DESC')->fetc
         <?php endforeach; ?>
         </tbody>
     </table>
+    </div>
 </section>

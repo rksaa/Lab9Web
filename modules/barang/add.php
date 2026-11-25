@@ -3,6 +3,7 @@ defined('APP_ROOT') or exit('Akses langsung tidak diizinkan.');
 
 $data   = ['nama' => '', 'kategori' => '', 'harga_beli' => '', 'harga_jual' => '', 'stok' => ''];
 $errors = [];
+$gambarSekarang = null;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!csrfValid()) {
@@ -11,16 +12,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         [$data, $errors] = validasiBarang($_POST);
         if (!$errors) {
-            $stmt = $pdo->prepare(
-                'INSERT INTO data_barang (nama, kategori, harga_beli, harga_jual, stok)
-                 VALUES (:nama, :kategori, :hb, :hj, :stok)'
-            );
-            $stmt->execute([
-                ':nama' => $data['nama'], ':kategori' => $data['kategori'],
-                ':hb' => (int) $data['harga_beli'], ':hj' => (int) $data['harga_jual'], ':stok' => (int) $data['stok'],
-            ]);
-            setFlash('sukses', 'Barang berhasil ditambahkan.');
-            redirect('barang/list');
+            [$gambar, $errGambar] = simpanGambar($_FILES['gambar'] ?? []);
+            if ($errGambar) {
+                $errors['gambar'] = $errGambar;
+            } else {
+                $stmt = $pdo->prepare(
+                    'INSERT INTO data_barang (nama, kategori, harga_beli, harga_jual, stok, gambar)
+                     VALUES (:nama, :kategori, :hb, :hj, :stok, :gambar)'
+                );
+                $stmt->execute([
+                    ':nama' => $data['nama'], ':kategori' => $data['kategori'],
+                    ':hb' => (int) $data['harga_beli'], ':hj' => (int) $data['harga_jual'],
+                    ':stok' => (int) $data['stok'], ':gambar' => $gambar,
+                ]);
+                setFlash('sukses', 'Barang berhasil ditambahkan.');
+                redirect('barang/list');
+            }
         }
     }
 }

@@ -17,6 +17,7 @@ if (!$barang) {
 
 $data   = $barang;
 $errors = [];
+$gambarSekarang = $barang['gambar'];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!csrfValid()) {
@@ -25,17 +26,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         [$data, $errors] = validasiBarang($_POST);
         if (!$errors) {
-            $stmt = $pdo->prepare(
-                'UPDATE data_barang SET nama = :nama, kategori = :kategori, harga_beli = :hb,
-                        harga_jual = :hj, stok = :stok WHERE id_barang = :id'
-            );
-            $stmt->execute([
-                ':nama' => $data['nama'], ':kategori' => $data['kategori'],
-                ':hb' => (int) $data['harga_beli'], ':hj' => (int) $data['harga_jual'],
-                ':stok' => (int) $data['stok'], ':id' => $id,
-            ]);
-            setFlash('sukses', 'Barang berhasil diubah.');
-            redirect('barang/list');
+            [$gambar, $errGambar] = simpanGambar($_FILES['gambar'] ?? [], $barang['gambar']);
+            if ($errGambar) {
+                $errors['gambar'] = $errGambar;
+            } else {
+                $stmt = $pdo->prepare(
+                    'UPDATE data_barang SET nama = :nama, kategori = :kategori, harga_beli = :hb,
+                            harga_jual = :hj, stok = :stok, gambar = :gambar WHERE id_barang = :id'
+                );
+                $stmt->execute([
+                    ':nama' => $data['nama'], ':kategori' => $data['kategori'],
+                    ':hb' => (int) $data['harga_beli'], ':hj' => (int) $data['harga_jual'],
+                    ':stok' => (int) $data['stok'], ':gambar' => $gambar, ':id' => $id,
+                ]);
+                setFlash('sukses', 'Barang berhasil diubah.');
+                redirect('barang/list');
+            }
         }
     }
 }

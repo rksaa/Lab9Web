@@ -1,20 +1,22 @@
 <?php
+// index.php = titik masuk aplikasi sekaligus router.
 define('APP_ROOT', __DIR__);
 session_start();
-ob_start();
+ob_start(); // supaya modul bisa redirect setelah memproses form
 
 require_once __DIR__ . '/helpers/functions.php';
 require_once __DIR__ . '/config/database.php';
 
+// Whitelist rute: hanya halaman di daftar ini yang boleh dimuat.
 $routes = [
-    'dashboard'        => ['file' => __DIR__ . '/views/dashboard.php',          'title' => 'Dashboard'],
-    'barang/list'      => ['file' => __DIR__ . '/modules/barang/list.php',      'title' => 'Data Barang'],
-    'barang/add'       => ['file' => __DIR__ . '/modules/barang/add.php',       'title' => 'Tambah Barang'],
-    'barang/edit'      => ['file' => __DIR__ . '/modules/barang/edit.php',      'title' => 'Ubah Barang'],
-    'barang/delete'    => ['file' => __DIR__ . '/modules/barang/delete.php',    'title' => 'Hapus Barang'],
-    'halaman/profil'   => ['file' => __DIR__ . '/modules/halaman/profil.php',   'title' => 'Profil'],
-    'halaman/kontak'   => ['file' => __DIR__ . '/modules/halaman/kontak.php',   'title' => 'Kontak'],
-    'latihan/function' => ['file' => __DIR__ . '/modules/latihan/function.php', 'title' => 'Latihan Function'],
+    'dashboard'        => ['file' => __DIR__ . '/views/dashboard.php',           'title' => 'Dashboard'],
+    'barang/list'      => ['file' => __DIR__ . '/modules/barang/list.php',       'title' => 'Data Barang'],
+    'barang/add'       => ['file' => __DIR__ . '/modules/barang/add.php',        'title' => 'Tambah Barang'],
+    'barang/edit'      => ['file' => __DIR__ . '/modules/barang/edit.php',       'title' => 'Ubah Barang'],
+    'barang/delete'    => ['file' => __DIR__ . '/modules/barang/delete.php',     'title' => 'Hapus Barang'],
+    'halaman/profil'   => ['file' => __DIR__ . '/modules/halaman/profil.php',    'title' => 'Profil'],
+    'halaman/kontak'   => ['file' => __DIR__ . '/modules/halaman/kontak.php',    'title' => 'Kontak'],
+    'latihan/function' => ['file' => __DIR__ . '/modules/latihan/function.php',  'title' => 'Latihan Function'],
 ];
 
 $page = $_GET['page'] ?? 'dashboard';

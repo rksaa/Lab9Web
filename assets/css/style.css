@@ -39,3 +39,6 @@ input[type=text], input[type=number], input[type=email], textarea {
 .card span { display: block; font-size: 13px; }
 .card strong { font-size: 22px; }
 code { background: #eceff1; padding: 1px 5px; border-radius: 3px; }
+
+.thumb { width: 56px; height: 56px; object-fit: cover; border-radius: 4px; border: 0.5px solid #cfd8dc; display: block; }
+.tabel-wrap { overflow-x: auto; }

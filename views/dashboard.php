@@ -23,6 +23,6 @@ try {
             <div class="card"><span>Nilai stok (harga jual)</span><strong><?= e(formatRupiah((float) $ringkas['nilai_stok'])) ?></strong></div>
         </div>
     <?php endif; ?>
-    <p>Ini adalah halaman dashboard. Anda dapat melihat ringkasan informasi di sini.</p>
+    <p>Aplikasi ini dipecah menjadi config, views, helpers, dan modules; semua halaman dimuat lewat <code>index.php?page=...</code>.</p>
     <a class="btn" href="<?= e(url('barang/list')) ?>">Kelola Data Barang</a>
 </section>
