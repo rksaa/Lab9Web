@@ -263,7 +263,7 @@ if (!is_string($page) || !array_key_exists($page, $routes)) {
 | Rute tidak terdaftar menampilkan halaman 404 | Gambar 19 |
 | Koneksi database hanya dikelola di `config/database.php` | Gambar 12, 15, dan 20 |
 
-## 8. Jawaban Pertanyaan Pemahaman
+## 10. Jawaban Pertanyaan Pemahaman
 1. **Modularisasi** adalah membagi aplikasi menjadi bagian kecil berdasarkan tanggung jawabnya. Manfaatnya: kode dapat dipakai ulang (header dan footer tidak ditulis berulang), perubahan cukup dilakukan di satu file, dan aplikasi lebih mudah dirawat serta dikerjakan bersama.
 2. Jika file yang dipanggil tidak ditemukan, `include` hanya menghasilkan *warning* dan eksekusi dilanjutkan, sedangkan `require` menghasilkan *fatal error* dan eksekusi dihentikan (Gambar 3).
 3. Konfigurasi database wajib tersedia, sehingga dipakai `require`. Akhiran `_once` mencegah file dimuat berulang agar tidak terjadi koneksi atau deklarasi ganda.
