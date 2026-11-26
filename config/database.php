@@ -1,9 +1,8 @@
 <?php
-// Satu-satunya tempat koneksi database dikelola.
 defined('APP_ROOT') or exit('Akses langsung tidak diizinkan.');
 
 $host = 'localhost';
-$db   = 'latihan1';   // sesuaikan dengan database praktikum 8
+$db   = 'latihan1';
 $user = 'root';
 $pass = '';
 
@@ -18,7 +17,6 @@ try {
         ]
     );
 } catch (PDOException $e) {
-    // Detail error tidak ditampilkan ke pengguna
     error_log($e->getMessage());
     http_response_code(500);
     exit('Terjadi kesalahan pada koneksi database.');

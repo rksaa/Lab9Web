@@ -1,8 +1,7 @@
 <?php
 defined('APP_ROOT') or exit('Akses langsung tidak diizinkan.');
-// Variabel dari pemanggil: $data (nilai form), $errors (pesan error), $tombol (teks tombol)
 ?>
-<form method="post" action="" enctype="multipart/form-data">
+<form method="post" action="">
     <?= csrfField() ?>
     <div class="baris">
         <label for="nama">Nama Barang</label>
@@ -28,14 +27,6 @@ defined('APP_ROOT') or exit('Akses langsung tidak diizinkan.');
         <label for="stok">Stok</label>
         <input type="number" id="stok" name="stok" min="0" value="<?= e($data['stok']) ?>" required>
         <?php if (isset($errors['stok'])): ?><div class="error"><?= e($errors['stok']) ?></div><?php endif; ?>
-    </div>
-    <div class="baris">
-        <label for="gambar">Gambar (JPG/PNG/WEBP, maks 2 MB)</label>
-        <?php if (!empty($gambarSekarang)): ?>
-            <img class="thumb" src="<?= e(baseUrl('uploads/' . $gambarSekarang)) ?>" alt="Gambar saat ini" style="margin-bottom:6px;">
-        <?php endif; ?>
-        <input type="file" id="gambar" name="gambar" accept="image/jpeg,image/png,image/webp">
-        <?php if (isset($errors['gambar'])): ?><div class="error"><?= e($errors['gambar']) ?></div><?php endif; ?>
     </div>
     <button type="submit"><?= e($tombol) ?></button>
     <a class="btn btn-warn" href="<?= e(url('barang/list')) ?>">Batal</a>

@@ -2,21 +2,17 @@
 defined('APP_ROOT') or exit('Akses langsung tidak diizinkan.');
 
 /* ---------- Tampilan & URL ---------- */
-
-// Escape teks sebelum dicetak ke HTML (cegah XSS)
 function e(?string $nilai): string
 {
     return htmlspecialchars((string) $nilai, ENT_QUOTES, 'UTF-8');
 }
 
-// Alamat folder aplikasi, mis. /Lab9Web/
 function baseUrl(string $path = ''): string
 {
     $dir = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'])), '/');
     return $dir . '/' . ltrim($path, '/');
 }
 
-// Bentuk tautan router: url('barang/edit', ['id' => 3]) => index.php?page=barang/edit&id=3
 function url(string $page = 'dashboard', array $params = []): string
 {
     $query = 'page=' . str_replace('%2F', '/', rawurlencode($page));
@@ -35,7 +31,6 @@ function redirect(string $page, array $params = []): never
     exit;
 }
 
-// Menandai menu aktif pada navigasi
 function menuAktif(string $prefix): string
 {
     global $page;
@@ -43,9 +38,7 @@ function menuAktif(string $prefix): string
     return ($sekarang === $prefix || str_starts_with($sekarang, rtrim($prefix, '/') . '/')) ? 'active' : '';
 }
 
-/* ---------- Format & utilitas (Latihan 2) ---------- */
-
-// Pembungkus mb_* dengan cadangan jika ekstensi mbstring tidak aktif
+/* ---------- Format & utilitas ---------- */
 function panjangTeks(string $teks): int
 {
     return function_exists('mb_strlen') ? mb_strlen($teks) : strlen($teks);
@@ -80,8 +73,6 @@ function ringkasTeks(string $teks, int $maks = 100): string
     return rtrim(potongTeks($teks, 0, $maks)) . '...';
 }
 
-/* ---------- Latihan function (bagian E) ---------- */
-
 function konversiCelciusKeFahrenheit(float $c): float
 {
     return ($c * 9 / 5) + 32;
@@ -101,8 +92,7 @@ function hitungTotal(float $harga, int $jumlah): float
     return $harga * $jumlah;
 }
 
-/* ---------- Pesan sukses/gagal (tantangan mandiri) ---------- */
-
+/* ---------- Pesan sukses/gagal ---------- */
 function setFlash(string $tipe, string $pesan): void
 {
     $_SESSION['flash'] = ['tipe' => $tipe, 'pesan' => $pesan];
@@ -119,8 +109,7 @@ function tampilkanFlash(): void
     echo '<div class="alert ' . $kelas . '">' . e($f['pesan']) . '</div>';
 }
 
-/* ---------- Perlindungan CSRF ---------- */
-
+/* ---------- CSRF ---------- */
 function csrfToken(): string
 {
     if (empty($_SESSION['csrf'])) {
@@ -141,8 +130,6 @@ function csrfValid(): bool
 }
 
 /* ---------- Validasi form barang ---------- */
-
-// Mengembalikan [data_bersih, daftar_error]
 function validasiBarang(array $input): array
 {
     $data = [
@@ -168,10 +155,21 @@ function validasiBarang(array $input): array
     return [$data, $errors];
 }
 
-/* ---------- Upload gambar ---------- */
+/* ---------- Autentikasi ---------- */
+
+function sudahLogin(): bool
+{
+    return !empty($_SESSION['user']['id']);
+}
+
+function userSekarang(): ?array
+{
+    return $_SESSION['user'] ?? null;
+}
+
+/* ---------- Upload foto ---------- */
 
 // Mengecilkan gambar (sisi terpanjang maks $maks piksel). Butuh ekstensi GD.
-// Mengembalikan false jika GD tidak tersedia, agar pemanggil memakai file asli.
 function perkecilGambar(string $sumber, string $tujuan, int $tipe, int $maks = 600): bool
 {
     $pembuka = [
@@ -217,19 +215,19 @@ function simpanGambar(array $file, ?string $lama = null): array
         return [$lama, null];
     }
     if ($kode !== UPLOAD_ERR_OK) {
-        return [$lama, 'Upload gambar gagal (kode ' . $kode . '). Pastikan ukuran maksimal 2 MB.'];
+        return [$lama, 'Upload foto gagal (kode ' . $kode . '). Pastikan ukuran maksimal 2 MB.'];
     }
     if ($file['size'] > 2 * 1024 * 1024) {
-        return [$lama, 'Ukuran gambar maksimal 2 MB.'];
+        return [$lama, 'Ukuran foto maksimal 2 MB.'];
     }
 
     $info = @getimagesize($file['tmp_name']);
     $ekstensi = [IMAGETYPE_JPEG => 'jpg', IMAGETYPE_PNG => 'png', IMAGETYPE_WEBP => 'webp'];
     if ($info === false || !isset($ekstensi[$info[2]])) {
-        return [$lama, 'Gambar harus berformat JPG, PNG, atau WEBP.'];
+        return [$lama, 'Foto harus berformat JPG, PNG, atau WEBP.'];
     }
 
-    $folder = APP_ROOT . '/uploads';
+    $folder = APP_ROOT . '/assets/uploads';
     if (!is_dir($folder)) {
         mkdir($folder, 0755, true);
     }
@@ -238,7 +236,7 @@ function simpanGambar(array $file, ?string $lama = null): array
 
     // Coba kecilkan dulu; jika GD tidak aktif, simpan file asli.
     if (!perkecilGambar($file['tmp_name'], $tujuan, $info[2]) && !move_uploaded_file($file['tmp_name'], $tujuan)) {
-        return [$lama, 'Gambar tidak bisa disimpan di folder uploads.'];
+        return [$lama, 'Foto tidak bisa disimpan di folder assets/uploads.'];
     }
     hapusGambar($lama);
     return [$nama, null];
@@ -249,8 +247,48 @@ function hapusGambar(?string $nama): void
     if (!$nama || basename($nama) !== $nama) {
         return;
     }
-    $path = APP_ROOT . '/uploads/' . $nama;
+    $path = APP_ROOT . '/assets/uploads/' . $nama;
     if (is_file($path)) {
         unlink($path);
     }
+}
+
+/* ---------- Validasi data pengguna ---------- */
+
+// Mengembalikan [data_bersih, daftar_error]
+function validasiUser(array $input, bool $wajibPassword): array
+{
+    $data = [
+        'username' => trim((string) ($input['username'] ?? '')),
+        'nama'     => trim((string) ($input['nama'] ?? '')),
+        'email'    => trim((string) ($input['email'] ?? '')),
+        'password' => (string) ($input['password'] ?? ''),
+    ];
+    $errors = [];
+
+    if (!preg_match('/^[A-Za-z0-9_]{3,30}$/', $data['username'])) {
+        $errors['username'] = 'Username 3-30 karakter: huruf, angka, atau garis bawah.';
+    }
+    if ($data['nama'] === '' || panjangTeks($data['nama']) > 100) {
+        $errors['nama'] = 'Nama wajib diisi (maksimal 100 karakter).';
+    }
+    if (!validasiEmail($data['email']) || panjangTeks($data['email']) > 100) {
+        $errors['email'] = 'Format email tidak valid.';
+    }
+    if (($wajibPassword || $data['password'] !== '') && strlen($data['password']) < 6) {
+        $errors['password'] = 'Password minimal 6 karakter.';
+    }
+    return [$data, $errors];
+}
+
+function usernameTerpakai(PDO $pdo, string $username, ?int $kecuali = null): bool
+{
+    if ($kecuali === null) {
+        $stmt = $pdo->prepare('SELECT COUNT(*) FROM users WHERE username = :u');
+        $stmt->execute([':u' => $username]);
+    } else {
+        $stmt = $pdo->prepare('SELECT COUNT(*) FROM users WHERE username = :u AND id_user <> :id');
+        $stmt->execute([':u' => $username, ':id' => $kecuali]);
+    }
+    return (int) $stmt->fetchColumn() > 0;
 }

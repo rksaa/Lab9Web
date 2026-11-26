@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= e($pageTitle ?? 'Aplikasi') ?> | Lab9Web</title>
-    <link rel="stylesheet" href="<?= e(baseUrl('assets/css/style.css')) ?>">
+    <link rel="stylesheet" href="<?= e(baseUrl('assets/css/style.css')) ?>?v=<?= filemtime(APP_ROOT . '/assets/css/style.css') ?>">
 </head>
 <body>
 <div class="container">
@@ -13,12 +13,20 @@
         <h1>Aplikasi PHP Modular</h1>
         <p>Praktikum 9 Pemrograman Web - CRUD Data Barang</p>
     </header>
+    <?php if (sudahLogin()): ?>
     <nav>
         <a class="<?= menuAktif('dashboard') ?>" href="<?= e(url('dashboard')) ?>">Dashboard</a>
         <a class="<?= menuAktif('barang') ?>" href="<?= e(url('barang/list')) ?>">Data Barang</a>
+        <a class="<?= menuAktif('user') ?>" href="<?= e(url('user/list')) ?>">Data Pengguna</a>
         <a class="<?= menuAktif('latihan') ?>" href="<?= e(url('latihan/function')) ?>">Latihan Function</a>
         <a class="<?= menuAktif('halaman/profil') ?>" href="<?= e(url('halaman/profil')) ?>">Profil</a>
         <a class="<?= menuAktif('halaman/kontak') ?>" href="<?= e(url('halaman/kontak')) ?>">Kontak</a>
+        <form method="post" action="<?= e(url('auth/logout')) ?>" class="nav-user">
+            <span><?= e(userSekarang()['nama'] ?? '') ?></span>
+            <?= csrfField() ?>
+            <button type="submit" class="btn-danger">Logout</button>
+        </form>
     </nav>
+    <?php endif; ?>
     <main>
         <?php tampilkanFlash(); ?>

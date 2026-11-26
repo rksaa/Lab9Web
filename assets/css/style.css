@@ -4,7 +4,7 @@ body { margin: 0; font-family: Arial, sans-serif; background: #f4f6f8; color: #2
 header, footer { padding: 16px; background: #eaf2f8; }
 header h1 { margin: 0 0 4px; }
 header p { margin: 0; }
-nav { display: flex; flex-wrap: wrap; gap: 8px; padding: 14px 0; }
+nav { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 14px 0; }
 nav a { color: #145a86; text-decoration: none; padding: 6px 12px; border-radius: 4px; }
 nav a:hover { text-decoration: underline; }
 nav a.active { background: #145a86; color: #fff; }
@@ -21,12 +21,12 @@ td.angka, th.angka { text-align: right; }
 .btn:hover, button:hover { background: #0f4466; }
 .btn-warn { background: #b26a00; }
 .btn-danger { background: #b3261e; }
-.aksi { display: flex; gap: 6px; align-items: center; }
-.aksi form { margin: 0; }
+.aksi { white-space: nowrap; }
+.aksi form { display: inline-block; margin: 0; }
 
 form .baris { margin-bottom: 12px; }
 label { display: block; font-weight: bold; margin-bottom: 4px; }
-input[type=text], input[type=number], input[type=email], textarea {
+input[type=text], input[type=password], input[type=number], input[type=email], textarea {
   width: 100%; padding: 8px; border: 1px solid #b0bec5; border-radius: 4px; font-size: 14px; }
 .error { color: #b3261e; font-size: 13px; margin-top: 4px; }
 
@@ -40,5 +40,9 @@ input[type=text], input[type=number], input[type=email], textarea {
 .card strong { font-size: 22px; }
 code { background: #eceff1; padding: 1px 5px; border-radius: 3px; }
 
-.thumb { width: 56px; height: 56px; object-fit: cover; border-radius: 4px; border: 0.5px solid #cfd8dc; display: block; }
+nav .nav-user { margin: 0 0 0 auto; display: flex; align-items: center; gap: 8px; font-size: 14px; }
 .tabel-wrap { overflow-x: auto; }
+td { vertical-align: middle; }
+.thumb { width: 56px; height: 56px; object-fit: cover; border-radius: 4px; border: 0.5px solid #cfd8dc; display: block; }
+.bantuan { color: #607d8b; font-size: 13px; margin-top: 4px; }
+.login-box { max-width: 360px; margin: 0 auto; }

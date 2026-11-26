@@ -1,2 +1,3 @@
-uploads/*
-!uploads/.htaccess
+assets/uploads/*
+!assets/uploads/.htaccess
+!assets/uploads/.gitkeep

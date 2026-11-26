@@ -10,9 +10,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = trim((string) ($_POST['email'] ?? ''));
     $pesan = trim((string) ($_POST['pesan'] ?? ''));
 
-    if ($nama === '')                { $errors['nama']  = 'Nama wajib diisi.'; }
-    if (!validasiEmail($email))      { $errors['email'] = 'Format email tidak valid.'; }
-    if ($pesan === '')               { $errors['pesan'] = 'Pesan wajib diisi.'; }
+    if ($nama === '')           { $errors['nama']  = 'Nama wajib diisi.'; }
+    if (!validasiEmail($email)) { $errors['email'] = 'Format email tidak valid.'; }
+    if ($pesan === '')          { $errors['pesan'] = 'Pesan wajib diisi.'; }
     $terkirim = !$errors;
 }
 ?>

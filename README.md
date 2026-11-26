@@ -107,3 +107,35 @@ Contoh di bawah adalah kendala umum pada praktikum ini; ganti atau tambahkan ses
 - Semua keluaran HTML di-escape dengan `e()`; query memakai prepared statement (PDO).
 - Tambah/ubah/hapus lewat POST dengan token CSRF dan validasi di server.
 - File di `config/`, `helpers/`, `views/`, `modules/` menolak akses langsung (`APP_ROOT`).
+
+## 10. Autentikasi dan Manajemen Pengguna
+Struktur tambahan pada project:
+```
+├── modules/
+│   ├── user/
+│   │   ├── list.php
+│   │   ├── add.php
+│   │   ├── edit.php
+│   │   └── delete.php
+│   └── auth/
+│       ├── login.php
+│       └── logout.php
+└── assets/
+    ├── css/style.css
+    ├── js/app.js
+    └── uploads/        # foto pengguna
+```
+
+Rute tambahan:
+| Rute (`index.php?page=`) | File | Keterangan |
+|---|---|---|
+| `auth/login` | modules/auth/login.php | Form login (satu-satunya rute publik) |
+| `auth/logout` | modules/auth/logout.php | Logout (hanya POST + CSRF) |
+| `user/list` | modules/user/list.php | Daftar pengguna |
+| `user/add` | modules/user/add.php | Tambah pengguna (POST, dengan foto) |
+| `user/edit&id=N` | modules/user/edit.php | Ubah pengguna; password kosong = tidak diganti |
+| `user/delete` | modules/user/delete.php | Hapus pengguna (hanya POST + CSRF; akun sendiri tidak bisa dihapus) |
+
+Semua rute selain `auth/login` kini mewajibkan login. Password disimpan sebagai hash (`password_hash`) dan dicek dengan `password_verify`. Foto yang diupload otomatis dikecilkan (maks. 600 px) dan folder `assets/uploads` menolak eksekusi file PHP.
+
+Tabel `users` dibuat lewat `database/latihan1.sql`. Akun contoh: `admin` / `admin123`.

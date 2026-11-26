@@ -16,16 +16,10 @@ if ($id === false) {
     redirect('barang/list');
 }
 
-// Ambil nama file gambar dulu agar bisa ikut dihapus
-$stmt = $pdo->prepare('SELECT gambar FROM data_barang WHERE id_barang = :id');
-$stmt->execute([':id' => $id]);
-$gambar = $stmt->fetchColumn();
-
 $stmt = $pdo->prepare('DELETE FROM data_barang WHERE id_barang = :id');
 $stmt->execute([':id' => $id]);
 
 if ($stmt->rowCount() > 0) {
-    hapusGambar($gambar ?: null);
     setFlash('sukses', 'Barang berhasil dihapus.');
 } else {
     setFlash('gagal', 'Barang tidak ditemukan.');
